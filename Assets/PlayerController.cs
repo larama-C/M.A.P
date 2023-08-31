@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public int playerSpeed = 10;
+    public int playerSpeed = 1;
     Rigidbody2D rid2D;
     SpriteRenderer rend;
 
@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             rend.flipX = false;
-            rid2D.AddForce(new Vector2(playerSpeed, 0), ForceMode2D.Force);
+            rid2D.AddForce(new Vector2(-playerSpeed, 0), ForceMode2D.Force);
             //transform.Translate(new Vector3(-playerSpeed * Time.deltaTime, 0, 0));
         }
     }
