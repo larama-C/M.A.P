@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private Animator anim;
     public int playerSpeed = 1;
+    public float JumpForce = 10;
     Rigidbody2D rid2D;
     SpriteRenderer rend;
 
@@ -40,9 +41,9 @@ public class PlayerController : MonoBehaviour
             rid2D.AddForce(new Vector2(-playerSpeed, 0), ForceMode2D.Force);
             //transform.Translate(new Vector3(-playerSpeed * Time.deltaTime, 0, 0));
         }
-        else if(Input.GetKey(KeyCode.LeftAlt))
+        else if(Input.GetKeyDown(KeyCode.LeftAlt))
         {
-            rid2D.AddForce(new Vector2(0, 2), ForceMode2D.Force);
+            rid2D.velocity = new Vector2(0, JumpForce);
             anim.SetBool("IsJump", true);
         }
         else
