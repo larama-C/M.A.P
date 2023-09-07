@@ -9,7 +9,7 @@ public class MonsterManager : MonoBehaviour
     [SerializeField]
     public string MobName;
     public int Level;
-    public int HP;
+    public int HP = 100;
     private Animator anim;
     public TextMeshProUGUI NameText;
     public TextMeshProUGUI LevelText;
@@ -26,16 +26,16 @@ public class MonsterManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(HP <= 0)
+        Debug.Log(HP);
+        if (HP <= 0)
         {
             Dead();
         }
     }
 
-    int UnderAttack(int Damage)
+    public void UnderAttack(int Damage)
     {
         HP -= Damage;
-        return HP;
     }
 
     void Dead()

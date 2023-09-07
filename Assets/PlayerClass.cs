@@ -9,26 +9,26 @@ namespace Assets
     {
         public string PlayerName;
         public int Level;
+        public int Exp;
         public int MAXAP;
         public int AP;
-        public int Exp;
         public int HP;
         public int MaxHP;
         public int MP;
         public int MaxMP;
         public int STR;
         public int STRLEVEL;
-        public int STRPer;
+        public float STRPer;
         public int DEX;
         public int DEXLEVEL;
-        public int DEXPer;
+        public float DEXPer;
         public int INT;
         public int INTLEVEL;
-        public int INTPer;
+        public float INTPer;
         public int LUK;
         public int LUKLEVEL;
-        public int LUKPer;
-        public int AllPer;
+        public float LUKPer;
+        public float AllPer;
         public int NotPerStat;
         public int Offensive;
         public int Mana;
@@ -39,29 +39,57 @@ namespace Assets
         public int MaxDamage;
         public int MinDamage;
 
-        void LeveltoStat()
+        void LeveltoMAXAP()
         {
-            if(Carrers < 3 && Carrers > 0)
+            MAXAP = Level * 5;
+            if (Carrers < 3 && Carrers > 0)
             {
-                PlusStat = Carrers * 4;
+                MAXAP += Carrers * 4;
             }
-            else if( Carrers <= 4)
+            else if (Carrers <= 4)
             {
-                PlusStat = ((Carrers - 2) * 5) + (4 * 2); 
+                MAXAP += ((Carrers - 2) * 5) + (4 * 2);
             }
             else
             {
-                PlusStat = 0;
+                MAXAP += 0;
             }
-            Stat = MinStat + Level * 5 + PlusStat;
         }
 
         void AllStat()
         {
-            STR = (MinStat + Stat) * (1 + STRPer) + NotPerStat;
-            DEX = (MinStat + Stat) * (1 + DEXPer) + NotPerStat;
-            INT = (MinStat + Stat) * (1 + INTPer) + NotPerStat;
-            LUK = (MinStat + Stat) * (1 + LUKPer) + NotPerStat;
+
+            STR = (int)((MinStat + STR) * (1 + STRPer) + NotPerStat);
+            DEX = (int)((MinStat + DEX) * (1 + DEXPer) + NotPerStat);
+            INT = (int)((MinStat + INT) * (1 + INTPer) + NotPerStat);
+            LUK = (int)((MinStat + LUK) * (1 + LUKPer) + NotPerStat);
+        }
+
+        void APTOSTAT(string STAT, int INITAP)
+        {
+            switch (STAT)
+            {
+                case "STR":
+                    STR += INITAP;
+                    break;
+                case "DEX":
+                    DEX += INITAP;
+                    break;
+                case "INT":
+                    INT += INITAP;
+                    break;
+                case "LUK":
+                    LUK += INITAP;
+                    break;
+            }
+            if(AP > INITAP)
+            {
+                AP = MAXAP - INITAP;
+            }
+            else
+            {
+                Debug.Log("스텟 초과");
+            }
         }
 
 
