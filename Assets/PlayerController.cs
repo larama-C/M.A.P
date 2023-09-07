@@ -25,6 +25,14 @@ public class PlayerController : MonoBehaviour
         PlayerMove();
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Monster")
+        {
+            return;
+        }
+    }
+
     void PlayerMove()
     {
         if(Input.GetKey(KeyCode.RightArrow))
@@ -34,17 +42,21 @@ public class PlayerController : MonoBehaviour
             rid2D.AddForce(new Vector2(playerSpeed, 0), ForceMode2D.Force);
             //transform.Translate(new Vector3(playerSpeed * Time.deltaTime, 0, 0));
         }
-        else if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             anim.SetBool("IsWalk", true);
             rend.flipX = false;
             rid2D.AddForce(new Vector2(-playerSpeed, 0), ForceMode2D.Force);
             //transform.Translate(new Vector3(-playerSpeed * Time.deltaTime, 0, 0));
         }
-        else if(Input.GetKeyDown(KeyCode.LeftAlt))
+        if(Input.GetKeyDown(KeyCode.LeftAlt))
         {
             rid2D.velocity = new Vector2(0, JumpForce);
             anim.SetBool("IsJump", true);
+        }
+        if(Input.anyKey)
+        { 
+
         }
         else
         {
