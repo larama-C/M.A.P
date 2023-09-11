@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public int playerSpeed = 1;
     public float JumpForce = 10;
     public int JumpCount = 1;
+    public int PlayerDamage = 100;
     public bool IsGround = true;
     Rigidbody2D rid2D;
     SpriteRenderer rend;
@@ -45,17 +46,18 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("IsJump", false);
             IsGround = true;
             JumpCount = 1;
+            return;
         }
     }
 
     void PlayerAttack()
     {
+        //플레이어 공격 모션 랜덤 
         int Rand;
         Rand = Random.Range(1, 4); 
         if(Input.GetKey(KeyCode.LeftControl) && AttackFlag==false)
         {
             AttackFlag = true;
-            Debug.Log("공격");
             anim.SetBool("IsAttack", true);
             anim.SetInteger("AttackNum", Rand);
             Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
@@ -63,7 +65,7 @@ public class PlayerController : MonoBehaviour
             {
                 if(collider.tag == "Monster")
                 {
-                    collider.GetComponent<MonsterManager>().UnderAttack(10);
+                    collider.GetComponent<MonsterManager>().UnderAttack(PlayerDamage);
                 }
             }
             StartCoroutine(WaitForIt());
@@ -93,14 +95,14 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("IsWalk", true);
             rend.flipX = true;
-            HitBox.transform.position = new Vector2(0.6f, 0f);
+            HitBox.transform.position = new Vector2(gameObject.transform.position.x + 0.6f, gameObject.transform.position.y);
             rid2D.AddForce(new Vector2(playerSpeed, 0), ForceMode2D.Force);
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             anim.SetBool("IsWalk", true);
             rend.flipX = false;
-            HitBox.transform.position = new Vector2(-0.6f, 0f);
+            HitBox.transform.position = new Vector2(gameObject.transform.position.x - 0.6f, gameObject.transform.position.y);
             rid2D.AddForce(new Vector2(-playerSpeed, 0), ForceMode2D.Force);
         }
 

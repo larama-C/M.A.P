@@ -92,6 +92,14 @@ namespace Assets
             }
         }
 
+        //public int Damage()
+        //{
+        //    int NowDamage;
+
+            
+
+        //    return NowDamage;
+        //}
 
     }
     public class PlayerClass : MonoBehaviour

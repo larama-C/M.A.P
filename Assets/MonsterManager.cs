@@ -3,31 +3,35 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MonsterManager : MonoBehaviour
 {
     [SerializeField]
     public string MobName;
     public int Level;
-    public int HP = 100;
+    public int MaxHP = 1000;
+    public int CurHP;
     private Animator anim;
     public TextMeshProUGUI NameText;
     public TextMeshProUGUI LevelText;
-
+    public Slider HPBar;
+    public TextMeshProUGUI HPText;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
-
+        CurHP= MaxHP;
+        HPBar.value = MaxHP;
         Texting();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(HP);
-        if (HP <= 0)
+        HPText.text = MaxHP.ToString() + "/" + CurHP.ToString();
+        if (CurHP <= 0)
         {
             Dead();
         }
@@ -35,7 +39,9 @@ public class MonsterManager : MonoBehaviour
 
     public void UnderAttack(int Damage)
     {
-        HP -= Damage;
+        CurHP -= Damage;
+        HPBar.value -= Damage;
+        Debug.Log(CurHP);
     }
 
     void Dead()
