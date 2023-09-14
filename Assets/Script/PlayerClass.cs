@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Assets
 {
-    public class PlayerClass
+    [CreateAssetMenu]
+    public class PlayerClass : ScriptableObject
     {
         public string PlayerName;
         public int Level = 0;
@@ -38,14 +39,19 @@ namespace Assets
         public float Critical;
         public int NotPerStat;
         public int Offensive;
+        public float OffensivePer;
         public int Mana;
+        public float ManaPer;
+        public float WeaponExpert;
+        public float DamagePer;
+        public float FinalDamagePer;
+        public float Expert;
         public int Carrers;
         public int Stat;
         public int MinStat = 4;
         public int PlusStat;
-        public int MaxDamage;
-        public int MinDamage;
-        int test;
+        public float MaxDamage;
+        public float MinDamage;
 
         void LeveltoMAXAP()
         {
@@ -147,15 +153,16 @@ namespace Assets
                 default:
                     return;
             }
-            MaxDamage = (MStat * 4 + SubStat) * 1000;
-            MinDamage = (MStat * 4 + SubStat) * 100;
+            //[(주스텟*4+부스텟)/100]*(총 공/마)*[(100+데미지%)/100]*[(100+최종 데미지)/100]*[(100+공/마%)/100]*무기상수*직업상수
+            MaxDamage = ((MStat * 4 + SubStat) * 0.01f) * (Offensive) * (1.0f + OffensivePer) * WeaponExpert * (1.0f+DamagePer) * (1.0f +FinalDamagePer);
+            MinDamage = Expert * MaxDamage;
         }
 
-        public int CalDamage()
+        public float CalDamage()
         {
-            int NowDamage = 0;
+            float NowDamage = 0;
 
-            int Rand;
+            float Rand;
             Rand = Random.Range(MinDamage, MaxDamage);
             NowDamage = Rand;
 

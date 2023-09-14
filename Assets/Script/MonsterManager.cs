@@ -9,14 +9,14 @@ using UnityEngine.UI;
 
 public class MonsterManager : MonoBehaviour
 {
-    [SerializeField]
     public string MobName;
     public int Level = 1;
     public int MaxHP = 1000000;
     public int CurHP;
-    public int GiveEXP;
+    public int GiveEXP = 10;
     public GameObject Player;
     public PlayerController PlayerCon;
+    public PlayerClass PlayerClass;
     public Animator anim;
     public TextMeshProUGUI NameText;
     public TextMeshProUGUI LevelText;
@@ -27,10 +27,9 @@ public class MonsterManager : MonoBehaviour
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
-        PlayerCon = Player.GetComponent<PlayerController>();
         GiveEXP = Level * 10;
         anim = GetComponent<Animator>();
-        CurHP= MaxHP;
+        CurHP = MaxHP;
         HPBar.maxValue = MaxHP;
         Texting();
     }
@@ -55,9 +54,10 @@ public class MonsterManager : MonoBehaviour
 
     void Dead()
     {
-        PlayerCon.GETEXP(GiveEXP);
+        
+        PlayerClass.Exp += GiveEXP;
         anim.SetBool("IsDead", true);
-        Destroy(gameObject, 1f);
+        Destroy(gameObject, 0f);
     }
 
     void Texting()

@@ -1,11 +1,12 @@
 using Assets;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public PlayerClass Phantom = new PlayerClass();
+    public PlayerClass player;
     private Animator anim;
     public int playerSpeed = 1;
     public float JumpForce = 10;
@@ -17,6 +18,8 @@ public class PlayerController : MonoBehaviour
     public Transform pos;
     public Vector2 boxSize;
     public GameObject HitBox;
+    public TextMeshProUGUI NameText;
+    public TextMeshProUGUI LevelText;
 
     public List<Skill> skillList = new List<Skill>();
 
@@ -31,11 +34,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(Phantom.MainStat);
-        //Debug.Log(Phantom.MStat);
+        UIUPDATE();
         PlayerMove();
         PlayerAttack();
-        Phantom.StatusDamage();
+        player.LevelUp();
+        player.StatusDamage();     
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -53,12 +56,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
     }
-    public void GETEXP(int EXP)
-    {
-        Phantom.Exp += EXP;
-        Debug.Log(Phantom.Exp);
-        Debug.Log(Phantom.Level);
-    }
 
     void PlayerAttack()
     {
@@ -75,7 +72,7 @@ public class PlayerController : MonoBehaviour
             {
                 if(collider.tag == "Monster")
                 {
-                    collider.GetComponent<MonsterManager>().UnderAttack(Phantom.CalDamage());
+                    collider.GetComponent<MonsterManager>().UnderAttack((int)player.CalDamage());
                 }
             }
             StartCoroutine(WaitForIt());
@@ -96,6 +93,11 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         AttackFlag = false;
+    }
+    void UIUPDATE()
+    {
+        NameText.text = player.PlayerName;
+        LevelText.text = "LV." + player.Level.ToString();
     }
 
     void PlayerMove()

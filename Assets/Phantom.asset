@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f69d568d3cfb10409b08d3a314ec3a3, type: 3}
+  m_Name: Phantom
+  m_EditorClassIdentifier: 
+  PlayerName: 
+  Level: 0
+  Exp: 0
+  NeedExp: 0
+  MAXAP: 0
+  AP: 0
+  HP: 0
+  MaxHP: 0
+  MP: 0
+  MaxMP: 0
+  MainStat: 
+  SubStat1: 
+  SubStat2: 
+  MStat: 0
+  SubStat: 0
+  MNotPerStat: 0
+  STR: 0
+  STRLEVEL: 0
+  STRPer: 0
+  DEX: 0
+  DEXLEVEL: 0
+  DEXPer: 0
+  INT: 0
+  INTLEVEL: 0
+  INTPer: 0
+  LUK: 0
+  LUKLEVEL: 0
+  LUKPer: 0
+  AllPer: 0
+  CriticalDamage: 0
+  Critical: 0
+  NotPerStat: 0
+  Offensive: 0
+  Mana: 0
+  Carrers: 0
+  Stat: 0
+  MinStat: 0
+  PlusStat: 0
+  MaxDamage: 0
+  MinDamage: 0
