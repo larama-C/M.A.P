@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets
@@ -8,14 +9,18 @@ namespace Assets
     {
         public string PlayerName;
         public int Level = 0;
+        public string Job;
+        public string Guild;
+        public int Popularity;
         public int Exp = 0;
         public int NeedExp = 10;
         public int MAXAP;
         public int AP;
-        public int HP;
-        public int MaxHP;
-        public int MP;
-        public int MaxMP;
+        public int UsedAP;
+        public int HP = 100;
+        public int MaxHP = 100;
+        public int MP = 100;
+        public int MaxMP = 100;
         public string MainStat = "LUK";
         public string SubStat1 = "DEX";
         public string SubStat2 = "";
@@ -23,63 +28,93 @@ namespace Assets
         public int SubStat;
         public int MNotPerStat;
         public int STR = 4;
-        public int STRLEVEL;
+        public int STRLEVEL = 0;
         public float STRPer = 0f;
         public int DEX = 4;
-        public int DEXLEVEL;
+        public int DEXLEVEL = 0;
         public float DEXPer = 0f;
         public int INT = 4;
-        public int INTLEVEL;
+        public int INTLEVEL = 0;
         public float INTPer = 0f;
         public int LUK = 4;
-        public int LUKLEVEL;
+        public int LUKLEVEL = 0;
         public float LUKPer = 0f;
         public float AllPer = 0f;
-        public float CriticalDamage;
-        public float Critical;
-        public int NotPerStat;
-        public int Offensive;
-        public float OffensivePer;
-        public int Mana;
-        public float ManaPer;
-        public float WeaponExpert;
-        public float DamagePer;
-        public float FinalDamagePer;
-        public float Expert;
-        public int Carrers;
-        public int Stat;
+        public float CriticalDamage = 0.0f;
+        public float Critical = 0.0f;
+        public int NotPerStat = 0;
+        public int Offensive = 10;
+        public float OffensivePer = 0.0f;
+        public int Mana = 10;
+        public float ManaPer = 0.0f;
+        public float WeaponExpert = 1.3f;
+        public float DamagePer = 0.0f;
+        public float FinalDamagePer = 0.0f;
+        public float Expert = 0.0f;
+        public int Carrers = 0;
+        public int Stat = 0;
         public int MinStat = 4;
-        public int PlusStat;
-        public float MaxDamage;
-        public float MinDamage;
+        public int PlusStat = 0;
+        public float MaxDamage = 0.0f;
+        public float MinDamage = 0.0f;
+
+
+        IEnumerator WaitForIt()
+        {
+            yield return new WaitForSeconds(1.0f);
+        }
+
+
+        public void StartSet()
+        {
+            AP = MAXAP - UsedAP;
+            HP = MaxHP;
+            MP = MaxMP;
+        }
+
+        public void Check()
+        {
+            if(HP > MaxHP)
+            {
+                HP = MaxHP;
+            }
+            if(MP > MaxMP)
+            {
+                MP = MaxMP;
+            }
+        }
+
+        
 
         void LeveltoMAXAP()
         {
-            MAXAP = Level * 5;
+            if (MAXAP != (Level - 1) * 5 )
+            {
+                MAXAP = (Level - 1) * 5;
+            }
             if (Carrers < 3 && Carrers > 0)
             {
                 MAXAP += Carrers * 4;
             }
-            else if (Carrers <= 4)
+            else if (Carrers >= 3)
             {
                 MAXAP += ((Carrers - 2) * 5) + (4 * 2);
             }
             else
             {
-                MAXAP += 0;
+                return;
             }
         }
 
         void AllStat()
         {
-
-            STR = (int)((MinStat + STR) * (1 + STRPer) + NotPerStat);
-            DEX = (int)((MinStat + DEX) * (1 + DEXPer) + NotPerStat);
-            INT = (int)((MinStat + INT) * (1 + INTPer) + NotPerStat);
-            LUK = (int)((MinStat + LUK) * (1 + LUKPer) + NotPerStat);
+            STR = (int)((MinStat + STR) * (1 + STRPer + AllPer) + NotPerStat);
+            DEX = (int)((MinStat + DEX) * (1 + DEXPer + AllPer) + NotPerStat);
+            INT = (int)((MinStat + INT) * (1 + INTPer + AllPer) + NotPerStat);
+            LUK = (int)((MinStat + LUK) * (1 + LUKPer + AllPer) + NotPerStat);
         }
 
-        void APTOSTAT(string STAT, int INITAP)
+        public void APTOSTAT(string STAT, int INITAP)
         {
             switch (STAT)
             {
@@ -96,9 +131,10 @@ namespace Assets
                     LUK += INITAP;
                     break;
             }
-            if(AP > INITAP)
+            if(AP >= INITAP)
             {
-                AP = MAXAP - INITAP;
+                UsedAP = UsedAP + INITAP;
+                AP = MAXAP - UsedAP;
             }
             else
             {
@@ -119,6 +155,7 @@ namespace Assets
 
         public void StatusDamage()
         {
+            AllStat();
             switch(MainStat)
             {
                 case "STR":

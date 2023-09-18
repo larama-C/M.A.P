@@ -27,7 +27,9 @@ public class MonsterManager : MonoBehaviour
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
+        Level = PlayerClass.Level;
         GiveEXP = Level * 10;
+        MaxHP = Level * 10;
         anim = GetComponent<Animator>();
         CurHP = MaxHP;
         HPBar.maxValue = MaxHP;
@@ -54,10 +56,10 @@ public class MonsterManager : MonoBehaviour
 
     void Dead()
     {
-        
         PlayerClass.Exp += GiveEXP;
         anim.SetBool("IsDead", true);
-        Destroy(gameObject, 0f);
+        gameObject.SetActive(false);
+        Destroy(gameObject, 1f);
     }
 
     void Texting()

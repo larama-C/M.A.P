@@ -9,6 +9,7 @@ public class UsedItem : Item
     public int HealHP;
     public int HealMP;
 
+    
     void Heal()
     {
         

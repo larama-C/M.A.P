@@ -12,43 +12,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f69d568d3cfb10409b08d3a314ec3a3, type: 3}
   m_Name: Phantom
   m_EditorClassIdentifier: 
-  PlayerName: 
-  Level: 0
-  Exp: 0
-  NeedExp: 0
-  MAXAP: 0
+  PlayerName: "\uC720\uC800"
+  Level: 6
+  Exp: 25
+  NeedExp: 180
+  MAXAP: 30
   AP: 0
-  HP: 0
-  MaxHP: 0
-  MP: 0
-  MaxMP: 0
-  MainStat: 
-  SubStat1: 
+  HP: 100
+  MaxHP: 100
+  MP: 100
+  MaxMP: 100
+  MainStat: LUK
+  SubStat1: DEX
   SubStat2: 
-  MStat: 0
-  SubStat: 0
+  MStat: 4
+  SubStat: 4
   MNotPerStat: 0
-  STR: 0
+  STR: 4
   STRLEVEL: 0
   STRPer: 0
-  DEX: 0
+  DEX: 4
   DEXLEVEL: 0
   DEXPer: 0
-  INT: 0
+  INT: 4
   INTLEVEL: 0
   INTPer: 0
-  LUK: 0
+  LUK: 4
   LUKLEVEL: 0
   LUKPer: 0
   AllPer: 0
   CriticalDamage: 0
   Critical: 0
   NotPerStat: 0
-  Offensive: 0
-  Mana: 0
+  Offensive: 10
+  OffensivePer: 0
+  Mana: 10
+  ManaPer: 0
+  WeaponExpert: 1.3
+  DamagePer: 0
+  FinalDamagePer: 0
+  Expert: 0.2
   Carrers: 0
   Stat: 0
   MinStat: 0
   PlusStat: 0
-  MaxDamage: 0
-  MinDamage: 0
+  MaxDamage: 2.6
+  MinDamage: 0.52

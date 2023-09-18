@@ -2,7 +2,9 @@ using Assets;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,8 +20,6 @@ public class PlayerController : MonoBehaviour
     public Transform pos;
     public Vector2 boxSize;
     public GameObject HitBox;
-    public TextMeshProUGUI NameText;
-    public TextMeshProUGUI LevelText;
 
     public List<Skill> skillList = new List<Skill>();
 
@@ -29,14 +29,15 @@ public class PlayerController : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         rid2D = GetComponent<Rigidbody2D>();
         rend = GetComponentInChildren<SpriteRenderer>();
+        player.StartSet();
     }
 
     // Update is called once per frame
     void Update()
     {
-        UIUPDATE();
         PlayerMove();
         PlayerAttack();
+        player.Check();
         player.LevelUp();
         player.StatusDamage();     
     }
@@ -62,7 +63,7 @@ public class PlayerController : MonoBehaviour
         //플레이어 공격 모션 랜덤 
         int Rand;
         Rand = Random.Range(1, 4); 
-        if(Input.GetKey(KeyCode.LeftControl) && AttackFlag==false)
+        if(Input.GetKey(KeyCode.LeftControl) && AttackFlag==false && player.MP >= 10)
         {
             AttackFlag = true;
             anim.SetBool("IsAttack", true);
@@ -73,6 +74,7 @@ public class PlayerController : MonoBehaviour
                 if(collider.tag == "Monster")
                 {
                     collider.GetComponent<MonsterManager>().UnderAttack((int)player.CalDamage());
+                    player.MP -= 10;
                 }
             }
             StartCoroutine(WaitForIt());
@@ -88,16 +90,18 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(pos.position, boxSize);
     }
+    IEnumerator WaitForHeal()
+    {
+        player.HP += (int)(player.MaxHP / 0.05f);
+        player.MP += (int)(player.MaxMP / 0.05f);
+        yield return new WaitForSeconds(100.0f);
+    }
+
 
     IEnumerator WaitForIt()
     {
         yield return new WaitForSeconds(1.0f);
         AttackFlag = false;
-    }
-    void UIUPDATE()
-    {
-        NameText.text = player.PlayerName;
-        LevelText.text = "LV." + player.Level.ToString();
     }
 
     void PlayerMove()
@@ -108,14 +112,18 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("IsWalk", true);
             rend.flipX = true;
             HitBox.transform.position = new Vector2(gameObject.transform.position.x + 0.6f, gameObject.transform.position.y);
-            rid2D.AddForce(new Vector2(playerSpeed, 0), ForceMode2D.Force);
+            transform.Translate(Vector2.right * Time.deltaTime * playerSpeed);
+            //rid2D.AddForce(new Vector2(playerSpeed, 0), ForceMode2D.Force);
+            //rid2D.velocity = new Vector2(playerSpeed, 0);
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             anim.SetBool("IsWalk", true);
             rend.flipX = false;
             HitBox.transform.position = new Vector2(gameObject.transform.position.x - 0.6f, gameObject.transform.position.y);
-            rid2D.AddForce(new Vector2(-playerSpeed, 0), ForceMode2D.Force);
+            transform.Translate(Vector2.left * Time.deltaTime * playerSpeed);
+            //rid2D.AddForce(new Vector2(-playerSpeed, 0), ForceMode2D.Force);
+            //rid2D.velocity = new Vector2(-playerSpeed, 0);
         }
 
         // 점프
@@ -136,6 +144,7 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("IsJump", false);
             anim.SetBool("IsWalk", false);
+            StartCoroutine(WaitForHeal());
         }
     }
 }
