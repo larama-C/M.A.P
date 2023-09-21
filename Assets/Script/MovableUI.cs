@@ -16,7 +16,7 @@ public class MovableUI : MonoBehaviour, IPointerDownHandler, IDragHandler
     {
         // 이동 대상 UI를 지정하지 않은 경우, 자동으로 부모로 초기화
         if (_targetTr == null)
-            _targetTr = transform.parent;
+            _targetTr = transform;
     }
 
     // 드래그 시작 위치 지정

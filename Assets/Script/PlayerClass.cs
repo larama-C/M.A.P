@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Assets
 {
@@ -45,10 +46,25 @@ namespace Assets
         public int NotPerStat = 0;
         public int Offensive = 10;
         public float OffensivePer = 0.0f;
+        public float IgnoreDefensive = 0.0f;
+        public float Defensive = 0.0f;
+        public int Tolerance = 0;
         public int Mana = 10;
         public float ManaPer = 0.0f;
+        public int Speed = 10;
+        public float Jump = 10.0f;
         public float WeaponExpert = 1.3f;
         public float DamagePer = 0.0f;
+        public float BossDamagePer = 0.0f;
+        public float BuffIncrease = 0.0f;
+        public float ItemIncrease = 0.0f;
+        public float MesoIncrease = 0.0f;
+        public float AttackSpeed = 0.0f;
+        public float Stance = 0.0f;
+        public int StarForce = 0;
+        public int ArcaneForce = 0;
+        public int AuthenticForce = 0;
+        public int Honor = 0;
         public float FinalDamagePer = 0.0f;
         public float Expert = 0.0f;
         public int Carrers = 0;
@@ -57,8 +73,8 @@ namespace Assets
         public int PlusStat = 0;
         public float MaxDamage = 0.0f;
         public float MinDamage = 0.0f;
-
-
+        bool IsDead = false;
+      
         IEnumerator WaitForIt()
         {
             yield return new WaitForSeconds(1.0f);
@@ -82,6 +98,11 @@ namespace Assets
             {
                 MP = MaxMP;
             }
+        }
+
+        public string StatReturn(string Statname)
+        {
+            return this.GetType().GetField(Statname).GetValue(this).ToString();
         }
 
         
@@ -130,6 +151,8 @@ namespace Assets
                 case "LUK":
                     LUK += INITAP;
                     break;
+                default:
+                    return;
             }
             if(AP >= INITAP)
             {

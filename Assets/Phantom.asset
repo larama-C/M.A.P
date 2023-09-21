@@ -13,11 +13,15 @@ MonoBehaviour:
   m_Name: Phantom
   m_EditorClassIdentifier: 
   PlayerName: "\uC720\uC800"
-  Level: 6
-  Exp: 25
-  NeedExp: 180
-  MAXAP: 30
+  Level: 5
+  Job: 
+  Guild: 
+  Popularity: 0
+  Exp: 20
+  NeedExp: 125
+  MAXAP: 20
   AP: 0
+  UsedAP: 20
   HP: 100
   MaxHP: 100
   MP: 100
@@ -25,7 +29,7 @@ MonoBehaviour:
   MainStat: LUK
   SubStat1: DEX
   SubStat2: 
-  MStat: 4
+  MStat: 24
   SubStat: 4
   MNotPerStat: 0
   STR: 4
@@ -37,7 +41,7 @@ MonoBehaviour:
   INT: 4
   INTLEVEL: 0
   INTPer: 0
-  LUK: 4
+  LUK: 24
   LUKLEVEL: 0
   LUKPer: 0
   AllPer: 0
@@ -56,5 +60,5 @@ MonoBehaviour:
   Stat: 0
   MinStat: 0
   PlusStat: 0
-  MaxDamage: 2.6
-  MinDamage: 0.52
+  MaxDamage: 12.999999
+  MinDamage: 2.6

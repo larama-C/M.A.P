@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Monster")
+        if(collision.gameObject.tag == "Monster" || collision.gameObject.tag == "Item")
         {
             Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(),collision.gameObject.GetComponent<Collider2D>());
             return;
