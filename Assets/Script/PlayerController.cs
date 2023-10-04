@@ -8,6 +8,15 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public enum State  // 현재 상태
+    {
+        Stand,     
+        Walk,         
+        Jump,       
+        Attack,
+        Alert
+    }
+
     public PlayerClass player;
     private Animator anim;
     public int playerSpeed = 1;
@@ -16,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public bool IsGround = true;
     Rigidbody2D rid2D;
     SpriteRenderer rend;
+    private int StateFlag = 0;
     private bool AttackFlag = false;
     public Transform pos;
     public Vector2 boxSize;
@@ -30,6 +40,7 @@ public class PlayerController : MonoBehaviour
         rid2D = GetComponent<Rigidbody2D>();
         rend = GetComponentInChildren<SpriteRenderer>();
         player.StartSet();
+        StateFlag = 0;
     }
 
     // Update is called once per frame
@@ -46,6 +57,10 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.gameObject.tag == "Monster" || collision.gameObject.tag == "Item")
         {
+            if(collision.gameObject.tag == "Monster")
+            {
+                StateFlag = (int)State.Alert;
+            }
             Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(),collision.gameObject.GetComponent<Collider2D>());
             return;
         }
@@ -58,13 +73,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void PlayerSkill()
+    {
+        if(Input.GetKeyDown(KeyCode.Delete))
+        {
+            
+        }
+        if (Input.GetKeyUp(KeyCode.Delete))
+        {
+
+        }
+    }
+
     void PlayerAttack()
     {
         //플레이어 공격 모션 랜덤 
         int Rand;
         Rand = Random.Range(1, 4); 
-        if(Input.GetKey(KeyCode.LeftControl) && AttackFlag==false && player.MP >= 10)
+        if(Input.GetKey(KeyCode.LeftControl) && AttackFlag==false && player.CurMP >= 10)
         {
+            StateFlag = (int)State.Attack;
             AttackFlag = true;
             anim.SetBool("IsAttack", true);
             anim.SetInteger("AttackNum", Rand);
@@ -74,7 +102,7 @@ public class PlayerController : MonoBehaviour
                 if(collider.tag == "Monster")
                 {
                     collider.GetComponent<MonsterManager>().UnderAttack((int)player.CalDamage());
-                    player.MP -= 10;
+                    player.CurMP -= 10;
                 }
             }
             StartCoroutine(WaitForIt());
@@ -90,17 +118,18 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(pos.position, boxSize);
     }
+
     IEnumerator WaitForHeal()
     {
-        player.HP += (int)(player.MaxHP / 0.05f);
-        player.MP += (int)(player.MaxMP / 0.05f);
-        yield return new WaitForSeconds(100.0f);
+        yield return new WaitForSeconds(10.0f);
+        player.CurHP += (int)(player.MaxHP / 0.05f);
+        player.CurMP += (int)(player.MaxMP / 0.05f);
     }
 
 
     IEnumerator WaitForIt()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(player.AttackSpeed);
         AttackFlag = false;
     }
 
@@ -129,6 +158,7 @@ public class PlayerController : MonoBehaviour
         // 점프
         if(Input.GetKeyDown(KeyCode.LeftAlt) && JumpCount > 0 && IsGround == true)
         {
+            StateFlag = (int)State.Jump;
             JumpCount--;
             IsGround = false;
             rid2D.velocity = new Vector2(0, JumpForce);
@@ -142,6 +172,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            StateFlag = (int)State.Stand;
             anim.SetBool("IsJump", false);
             anim.SetBool("IsWalk", false);
             StartCoroutine(WaitForHeal());

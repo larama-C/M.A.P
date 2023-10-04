@@ -11,9 +11,22 @@ public class UIManager : MonoBehaviour
     public GameObject StatusWindow;
     public GameObject InventoryWindow;
     public GameObject EquipmentWindow;
+    public Canvas InventoryCanvas;
 
     // Start is called before the first frame update
     void Start()
+    {
+        //StatusWindow.SetActive(false);
+        //InventoryWindow.SetActive(false);
+        //EquipmentWindow.SetActive(false);
+    }
+
+    private void Awake()
+    {
+        Invoke("Init", 0.0001f); // 2초뒤 LaunchProjectile함수 호출
+    }
+
+    void Init()
     {
         StatusWindow.SetActive(false);
         InventoryWindow.SetActive(false);

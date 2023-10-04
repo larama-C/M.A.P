@@ -10,7 +10,9 @@ public class Skill : ScriptableObject
     public int SkillId;
     public string SkillName;
     public string SkillDescription;
+    public int SkillLevel;
     public float damage;
+    private int AttackCount;
     public float cooltime;
     public GameObject HitBox;
     public GameObject Player;
@@ -19,9 +21,5 @@ public class Skill : ScriptableObject
 
     public string animationName;
     public Sprite icon;
-
-    public void CalDamage()
-    {
-        
-    }
+    private Animator anim;
 }

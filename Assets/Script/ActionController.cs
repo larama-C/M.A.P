@@ -24,6 +24,11 @@ public class ActionController : MonoBehaviour
 
     public InventoryManager Inventory;
 
+
+    private void Start()
+    {
+    }
+
     void Update()
     {
         CheckItem();

@@ -18,5 +18,6 @@ public class ItemPickUp : MonoBehaviour
     void SetItem()
     {
         DropImage.sprite = item.icon;
+        DropImage.enabled = true;
     }
 }

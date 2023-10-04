@@ -34,9 +34,9 @@ public class StatusManager : MonoBehaviour
     void Update()
     {
         Ps.AP = Ps.MAXAP - Ps.UsedAP;
-        PlayerStats[4].text = Ps.StatReturn(PlayerStats[4].name);
+        //PlayerStats[4].text = Ps.StatReturn(PlayerStats[4].name);
         StatusUI();
-        if(DetailStatus.active == true)
+        if(DetailStatus.activeSelf == true)
         {
             DetailStatusUI();
         }
@@ -77,8 +77,8 @@ public class StatusManager : MonoBehaviour
         PlayerStats[3].text = Ps.Popularity.ToString();
         PlayerStats[4].text = ((int)Ps.MinDamage).ToString();
         PlayerStats[5].text = ((int)Ps.MaxDamage).ToString();
-        PlayerStats[6].text = Ps.HP.ToString() + "/" + Ps.MaxHP.ToString();
-        PlayerStats[7].text = Ps.MP.ToString() + "/" + Ps.MaxMP.ToString();
+        PlayerStats[6].text = Ps.CurHP.ToString() + "/" + Ps.MaxHP.ToString();
+        PlayerStats[7].text = Ps.CurMP.ToString() + "/" + Ps.MaxMP.ToString();
         PlayerStats[8].text = Ps.STR.ToString();
         PlayerStats[9].text = Ps.DEX.ToString();
         PlayerStats[10].text = Ps.INT.ToString();
@@ -113,7 +113,7 @@ public class StatusManager : MonoBehaviour
 
     public void DetailStatBtn()
     {
-        if (DetailStatus.active == false)
+        if (DetailStatus.activeSelf == false)
         {
             DetailStatus.SetActive(true);
         }

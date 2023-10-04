@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,6 +9,17 @@ namespace Assets
     [CreateAssetMenu]
     public class PlayerClass : ScriptableObject
     {
+        public enum ClassType  // 직업 유형
+        {
+            Worrior,      //전사
+            Mage,         //마법사
+            Archor,       //궁수
+            Assassin,     //도적
+            Pirates       //해적
+        }
+
+        public ClassType classtype;
+
         public string PlayerName;
         public int Level = 0;
         public string Job;
@@ -18,9 +30,9 @@ namespace Assets
         public int MAXAP;
         public int AP;
         public int UsedAP;
-        public int HP = 100;
+        public int CurHP = 100;
         public int MaxHP = 100;
-        public int MP = 100;
+        public int CurMP = 100;
         public int MaxMP = 100;
         public string MainStat = "LUK";
         public string SubStat1 = "DEX";
@@ -59,7 +71,7 @@ namespace Assets
         public float BuffIncrease = 0.0f;
         public float ItemIncrease = 0.0f;
         public float MesoIncrease = 0.0f;
-        public float AttackSpeed = 0.0f;
+        public float AttackSpeed = 1.0f;
         public float Stance = 0.0f;
         public int StarForce = 0;
         public int ArcaneForce = 0;
@@ -73,6 +85,8 @@ namespace Assets
         public int PlusStat = 0;
         public float MaxDamage = 0.0f;
         public float MinDamage = 0.0f;
+        public int Meso = 0;
+        public int MaplePoint = 0;
         bool IsDead = false;
       
         IEnumerator WaitForIt()
@@ -84,25 +98,32 @@ namespace Assets
         public void StartSet()
         {
             AP = MAXAP - UsedAP;
-            HP = MaxHP;
-            MP = MaxMP;
+            CurHP = MaxHP;
+            CurMP = MaxMP;
         }
 
         public void Check()
         {
-            if(HP > MaxHP)
+            if(CurHP > MaxHP)
             {
-                HP = MaxHP;
+                CurHP = MaxHP;
             }
-            if(MP > MaxMP)
+            if(CurMP > MaxMP)
             {
-                MP = MaxMP;
+                CurMP = MaxMP;
+            }
+
+            if(CurHP <= 0)
+            {
+                IsDead = true;
             }
         }
 
         public string StatReturn(string Statname)
         {
-            return this.GetType().GetField(Statname).GetValue(this).ToString();
+            var r = this.GetType().GetField(Statname).GetValue(this).ToString();
+
+            return r;
         }
 
         
@@ -223,11 +244,17 @@ namespace Assets
             float NowDamage = 0;
 
             float Rand;
-            Rand = Random.Range(MinDamage, MaxDamage);
+            Rand = UnityEngine.Random.Range(MinDamage, MaxDamage);
             NowDamage = Rand;
 
             Debug.Log(NowDamage);
             return NowDamage;
+        }
+
+        public void Healing(int HP, int MP)
+        {
+            CurHP += HP;
+            CurMP += MP;
         }
 
     }

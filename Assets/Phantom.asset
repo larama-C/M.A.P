@@ -12,19 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f69d568d3cfb10409b08d3a314ec3a3, type: 3}
   m_Name: Phantom
   m_EditorClassIdentifier: 
+  classtype: 0
   PlayerName: "\uC720\uC800"
-  Level: 5
+  Level: 7
   Job: 
   Guild: 
   Popularity: 0
-  Exp: 20
-  NeedExp: 125
-  MAXAP: 20
-  AP: 0
+  Exp: 115
+  NeedExp: 245
+  MAXAP: 30
+  AP: 10
   UsedAP: 20
-  HP: 100
+  CurHP: 2099
   MaxHP: 100
-  MP: 100
+  CurMP: 2099
   MaxMP: 100
   MainStat: LUK
   SubStat1: DEX
@@ -50,10 +51,25 @@ MonoBehaviour:
   NotPerStat: 0
   Offensive: 10
   OffensivePer: 0
+  IgnoreDefensive: 0
+  Defensive: 0
+  Tolerance: 0
   Mana: 10
   ManaPer: 0
+  Speed: 10
+  Jump: 10
   WeaponExpert: 1.3
   DamagePer: 0
+  BossDamagePer: 0
+  BuffIncrease: 0
+  ItemIncrease: 0
+  MesoIncrease: 0
+  AttackSpeed: 0.1
+  Stance: 0
+  StarForce: 0
+  ArcaneForce: 0
+  AuthenticForce: 0
+  Honor: 0
   FinalDamagePer: 0
   Expert: 0.2
   Carrers: 0
@@ -62,3 +78,5 @@ MonoBehaviour:
   PlusStat: 0
   MaxDamage: 12.999999
   MinDamage: 2.6
+  Meso: 20
+  MaplePoint: 20

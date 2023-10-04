@@ -22,10 +22,8 @@ public class MonsterManager : MonoBehaviour
     public TextMeshProUGUI LevelText;
     public Slider HPBar;
     public TextMeshProUGUI HPText;
-    public TextMeshProUGUI DamageText;
-
-    public float TextSpeed = 2.0f;
-    Color alpha;
+    public GameObject DamageText;
+    public Transform hudPos;
 
     // Start is called before the first frame update
     void Start()
@@ -44,10 +42,10 @@ public class MonsterManager : MonoBehaviour
     void Update()
     {
         HPBar.value = CurHP;
-        HPText.text = MaxHP.ToString() + "/" + CurHP.ToString();
+        HPText.text = CurHP.ToString() + "/" + MaxHP.ToString();
         if (CurHP <= 0)
         {
-            CurHP= 0;
+            CurHP = 0;
             Dead();
         }
     }
@@ -56,11 +54,10 @@ public class MonsterManager : MonoBehaviour
     {
         CurHP -= Damage;
         HPBar.value -= Damage;
-        DamageText.text = Damage.ToString();
-        DamageText.gameObject.transform.Translate(new Vector2(0, TextSpeed * Time.deltaTime)); // 텍스트 위치
-
-        //alpha.a = Mathf.Lerp(alpha.a, 0, Time.deltaTime * TextSpeed); // 텍스트 알파값
-        //DamageText.color = alpha;
+        GameObject hudText = Instantiate(DamageText);
+        hudText.transform.position = hudPos.position;
+        hudText.GetComponent<DamageText>().damage = Damage;
+        hudText.SetActive(true);
     }
 
     void Dead()

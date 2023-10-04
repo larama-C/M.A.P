@@ -14,6 +14,7 @@ public class StatusBarManager : MonoBehaviour
     public Image HPBAR;
     public Image MPBAR;
     public Image EXPBAR;
+    [SerializeField] private TextMeshProUGUI EXPText;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,7 @@ public class StatusBarManager : MonoBehaviour
         HPBAR.fillAmount = 1f;
         MPBAR.fillAmount = 1f;
         EXPBAR.fillAmount = 1f;
+        EXPText = ExpBar.GetComponentInChildren<TextMeshProUGUI>();
         PlayerStatusText = StatusBar.GetComponentsInChildren<TextMeshProUGUI>();
     }
 
@@ -32,12 +34,24 @@ public class StatusBarManager : MonoBehaviour
 
     void StatusBarUI()
     {
-        PlayerStatusText[0].text = Ps.HP.ToString() + "/" + Ps.MaxHP.ToString();
-        PlayerStatusText[1].text = Ps.MP.ToString() + "/" + Ps.MaxMP.ToString();
+        PlayerStatusText[0].text = Ps.CurHP.ToString() + "/" + Ps.MaxHP.ToString();
+        PlayerStatusText[1].text = Ps.CurMP.ToString() + "/" + Ps.MaxMP.ToString();
         PlayerStatusText[2].text = Ps.PlayerName;
         PlayerStatusText[3].text = "LV." + Ps.Level.ToString();
-        HPBAR.fillAmount = (float)Ps.HP / Ps.MaxHP;
-        MPBAR.fillAmount = (float)Ps.MP / Ps.MaxMP;
+        EXPText.text = Ps.Exp.ToString() + "/" + Ps.NeedExp.ToString() + "(" + (((float)Ps.Exp / (float)Ps.NeedExp) * 100.0F) + "%)";
+        HPBAR.fillAmount = (float)Ps.CurHP / Ps.MaxHP;
+        MPBAR.fillAmount = (float)Ps.CurMP / Ps.MaxMP;
         EXPBAR.fillAmount = (float)Ps.Exp / Ps.NeedExp;
+        //StartCoroutine(ImageDelayCoroutine(EXPBAR));
+    }
+
+    IEnumerator ImageDelayCoroutine(Image img) 
+    {
+        while (img.fillAmount < 1)
+        {
+            img.fillAmount += (float)(Ps.Exp / Ps.NeedExp) * Time.deltaTime;
+
+            yield return null;
+        }
     }
 }
