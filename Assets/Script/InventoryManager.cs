@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    private PlayerClass ps;
+    [SerializeField] private PlayerClass ps;
 
     [SerializeField] private TextMeshProUGUI[] Coin;
     public Slot[] slots;
@@ -21,7 +21,7 @@ public class InventoryManager : MonoBehaviour
         {
             return;
         }
-        ps = FindObjectOfType<PlayerClass>();
+        ps = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().player;
         slots = SlotParent.GetComponentsInChildren<Slot>();
         Coin = CoinParent.GetComponentsInChildren<TextMeshProUGUI>();
         m_ISInit = true;
@@ -44,8 +44,8 @@ public class InventoryManager : MonoBehaviour
 
     private void UPDATEUI()
     {
-        Debug.Log(ps.Meso.ToString());
-        Coin[0].text = "20";
+        Coin[0].text = ps.Meso.ToString();
+        Coin[1].text = ps.MaplePoint.ToString();
     }
 
     public void InputItem(Item item, int Count = 1)

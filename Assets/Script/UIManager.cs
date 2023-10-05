@@ -9,16 +9,19 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public GameObject StatusWindow;
+    public StatusManager statusManager;
     public GameObject InventoryWindow;
+    public InventoryManager inventoryManager;
     public GameObject EquipmentWindow;
+    public EquipmentManager equipmentManager;
     public Canvas InventoryCanvas;
 
     // Start is called before the first frame update
     void Start()
     {
-        //StatusWindow.SetActive(false);
-        //InventoryWindow.SetActive(false);
-        //EquipmentWindow.SetActive(false);
+        statusManager = StatusWindow.GetComponent<StatusManager>();
+        inventoryManager = InventoryWindow.GetComponent<InventoryManager>();
+        equipmentManager = EquipmentWindow.GetComponent<EquipmentManager>();
     }
 
     private void Awake()

@@ -15,6 +15,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
     public Image[] itemImage;
     private TextMeshProUGUI CountText;
     private EquipmentManager EM;
+    private InventoryManager IM;
     private PlayerClass ps;
 
     // Start is called before the first frame update
@@ -22,8 +23,9 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
     {
         itemImage = GetComponentsInChildren<Image>();
         CountText = GetComponentInChildren<TextMeshProUGUI>();
-        EM = FindObjectOfType<EquipmentManager>();
-        ps = FindObjectOfType<PlayerClass>();
+        EM = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>().equipmentManager;
+        IM = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>().inventoryManager;
+        ps = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().player;
         SetColor(0);
 
         if(CountText == null)
@@ -41,10 +43,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
     // Update is called once per frame
     void Update()
     {
-        if (item == null)
-        {
-            CountText.text = "";
-        }
+
     }
 
     public void Additem(Item Initem, int InCount)
@@ -104,20 +103,31 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
         {
             if (item != null)
             {
-                if (item.itemType == Item.ItemType.Equipment)
+                if(gameObject.CompareTag("InvenSlot"))
                 {
-                    EM.InputItem(item);
-                }
-                else
-                {
-                    if (item.itemType == Item.ItemType.Used)
+                    if (item.itemType == Item.ItemType.Equipment)
                     {
-                        ps.Healing(item.GetComponent<UsedItem>().HealHP, item.GetComponent<UsedItem>().HealMP);
+                        EM.InputItem(item);
+                        AddCount(-1);
                     }
-                    // 소비
-                    Debug.Log(item.ItemName + " 을 사용했습니다.");
-                    AddCount(-1);
+                    else if (item.itemType == Item.ItemType.Used)
+                    {
+                        if (item is UsedItem v)
+                        {
+                            ps.Healing(v.HealHP, v.HealMP);
+                            AddCount(-1);
+                        }
+                    }
                 }
+                else if(gameObject.CompareTag("EquipSlot"))
+                {
+                    if (item.itemType == Item.ItemType.Equipment)
+                    {
+                        IM.InputItem(item);
+                        AddCount(-1);
+                    }
+                }
+
             }
         }
     }
@@ -148,7 +158,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
 
     void IDropHandler.OnDrop(PointerEventData eventData)
     {
-        if (DragSlot.instance.dragSlot != null)
+        if (DragSlot.instance.dragSlot != null && gameObject.CompareTag("InvenSlot"))
         {
             ChangeSlot();
         }

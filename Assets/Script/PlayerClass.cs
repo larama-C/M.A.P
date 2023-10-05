@@ -88,12 +88,6 @@ namespace Assets
         public int Meso = 0;
         public int MaplePoint = 0;
         bool IsDead = false;
-      
-        IEnumerator WaitForIt()
-        {
-            yield return new WaitForSeconds(1.0f);
-        }
-
 
         public void StartSet()
         {
@@ -125,8 +119,6 @@ namespace Assets
 
             return r;
         }
-
-        
 
         void LeveltoMAXAP()
         {
@@ -253,8 +245,11 @@ namespace Assets
 
         public void Healing(int HP, int MP)
         {
-            CurHP += HP;
-            CurMP += MP;
+            if(CurHP < MaxHP || CurMP < MaxMP)
+            {
+                CurHP += HP;
+                CurMP += MP;
+            }
         }
 
     }

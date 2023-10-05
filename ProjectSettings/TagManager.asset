@@ -9,6 +9,12 @@ TagManager:
   - Ground
   - BAR
   - Item
+  - Status
+  - Inventory
+  - Equipment
+  - UIManager
+  - EquipSlot
+  - InvenSlot
   layers:
   - Default
   - TransparentFX

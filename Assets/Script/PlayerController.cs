@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
         //플레이어 공격 모션 랜덤 
         int Rand;
         Rand = Random.Range(1, 4); 
-        if(Input.GetKey(KeyCode.LeftControl) && AttackFlag==false && player.CurMP >= 10)
+        if(Input.GetKey(KeyCode.LeftControl) && AttackFlag==false)
         {
             StateFlag = (int)State.Attack;
             AttackFlag = true;
@@ -102,7 +102,6 @@ public class PlayerController : MonoBehaviour
                 if(collider.tag == "Monster")
                 {
                     collider.GetComponent<MonsterManager>().UnderAttack((int)player.CalDamage());
-                    player.CurMP -= 10;
                 }
             }
             StartCoroutine(WaitForIt());
@@ -125,7 +124,6 @@ public class PlayerController : MonoBehaviour
         player.CurHP += (int)(player.MaxHP / 0.05f);
         player.CurMP += (int)(player.MaxMP / 0.05f);
     }
-
 
     IEnumerator WaitForIt()
     {
@@ -175,7 +173,6 @@ public class PlayerController : MonoBehaviour
             StateFlag = (int)State.Stand;
             anim.SetBool("IsJump", false);
             anim.SetBool("IsWalk", false);
-            StartCoroutine(WaitForHeal());
         }
     }
 }
