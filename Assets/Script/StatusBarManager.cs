@@ -19,10 +19,10 @@ public class StatusBarManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Ps = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().player;
         HPBAR.fillAmount = 1f;
         MPBAR.fillAmount = 1f;
         EXPBAR.fillAmount = 1f;
-        EXPText = ExpBar.GetComponentInChildren<TextMeshProUGUI>();
         PlayerStatusText = StatusBar.GetComponentsInChildren<TextMeshProUGUI>();
     }
 

@@ -14,7 +14,6 @@ public class UIManager : MonoBehaviour
     public InventoryManager inventoryManager;
     public GameObject EquipmentWindow;
     public EquipmentManager equipmentManager;
-    public Canvas InventoryCanvas;
 
     // Start is called before the first frame update
     void Start()

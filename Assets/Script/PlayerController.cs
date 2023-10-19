@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
         //플레이어 공격 모션 랜덤 
         int Rand;
         Rand = Random.Range(1, 4); 
-        if(Input.GetKey(KeyCode.LeftControl) && AttackFlag==false)
+        if(Input.GetKeyDown(KeyCode.LeftControl) && AttackFlag==false)
         {
             StateFlag = (int)State.Attack;
             AttackFlag = true;

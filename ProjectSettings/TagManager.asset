@@ -15,6 +15,8 @@ TagManager:
   - UIManager
   - EquipSlot
   - InvenSlot
+  - QuickSlot
+  - BossMonster
   layers:
   - Default
   - TransparentFX

@@ -15,6 +15,7 @@ MonoBehaviour:
   ItemId: 0
   icon: {fileID: 21300000, guid: 70aae50e6eb329142b3b45acfd77edef, type: 3}
   ItemName: "\uBE68\uAC04 \uD3EC\uC158"
+  ItemCount: 50
   itemType: 1
   HealHP: 50
   HealMP: 0

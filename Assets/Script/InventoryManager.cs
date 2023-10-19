@@ -70,7 +70,7 @@ public class InventoryManager : MonoBehaviour
             if (slots[i].item == null)
             {
                 Debug.Log("인벤토리 인");
-                slots[i].Additem(item,Count);
+                slots[i].Additem(item, Count);
                 return;
             }
         }

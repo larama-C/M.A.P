@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Timeline.Actions;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -68,7 +66,7 @@ public class ActionController : MonoBehaviour
         {
             if (hitInfo.transform != null)
             {
-                Inventory.InputItem(hitInfo.transform.GetComponent<ItemPickUp>().item);
+                Inventory.InputItem(hitInfo.transform.GetComponent<ItemPickUp>().item, hitInfo.transform.GetComponent<ItemPickUp>().item.ItemCount);
                 Destroy(hitInfo.transform.gameObject);
                 pickupActivated = false;
             }

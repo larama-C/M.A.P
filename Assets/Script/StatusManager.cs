@@ -27,7 +27,7 @@ public class StatusManager : MonoBehaviour
         PlayerStats = StatusMain.GetComponentsInChildren<TextMeshProUGUI>();
         PlayerStatButtons = StatusMain.GetComponentsInChildren<Button>();
         PlayerDetailStats = DetailStatus.GetComponentsInChildren<TextMeshProUGUI>();
-
+        Ps = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().player;
     }
 
     // Update is called once per frame

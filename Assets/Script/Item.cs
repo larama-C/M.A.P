@@ -10,6 +10,7 @@ public class Item : ScriptableObject
     public int ItemId;
     public Sprite icon;
     public string ItemName;
+    public int ItemCount = 1;
     public enum ItemType  // 아이템 유형
     {
         Equipment,      //장비 아이템

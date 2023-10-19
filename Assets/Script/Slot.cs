@@ -1,6 +1,7 @@
 using Assets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,14 +10,18 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragHandler, IDropHandler, IBeginDragHandler
 {
+    public Skill skill;
     public Item item;
     public int itemCount;
 
     public Image[] itemImage;
     private TextMeshProUGUI CountText;
+    public TextMeshProUGUI KeyCode = null;
     private EquipmentManager EM;
     private InventoryManager IM;
     private PlayerClass ps;
+
+    private bool SkillUsed = false;
 
     // Start is called before the first frame update
     void Start()
@@ -33,10 +38,18 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
             CountText= gameObject.AddComponent<TextMeshProUGUI>();
         }
 
-        if(item == null)
+        if(item == null && skill == null)
         {
             itemImage[1].enabled = false;
             CountText.text = "";
+        }
+        else if(skill != null)
+        {
+            itemImage[1].sprite = skill.icon;
+            SetColor(1);
+            itemImage[1].enabled = true;
+            CountText.text = "";
+            CountText.enabled = false;
         }
     }
 
@@ -46,9 +59,76 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
 
     }
 
+    public void SetKeyCode(KeyCode keys)
+    {
+        string temp = keys.ToString();
+        if(KeyCode != null)
+        {
+            if(temp.Contains("Alpha"))
+            {
+                string replace = temp.Replace("Alpha", "");
+                KeyCode.text = replace;
+            }
+            else
+            {
+                KeyCode.text = temp;
+            }
+        }
+    }
+
+
+    Coroutine coroutine;
+
+    public void SkillUse()
+    {
+        if(SkillUsed == false)
+        {
+            coroutine = StartCoroutine(Cooltime());
+        }
+    }
+
+    private IEnumerator Cooltime()
+    {
+        float cool = skill.cooltime;
+        itemImage[1].sprite = skill.Cooltimeicon;
+        itemImage[1].enabled = true;
+        SetColor(1);
+        while (cool > 0.0f)
+        {
+            SkillUsed = true;
+            cool -= Time.deltaTime;
+            
+            itemImage[1].fillAmount = cool / skill.cooltime;
+
+            if (cool <= 0.0f)
+            {
+                itemImage[1].fillAmount = 1f;
+                itemImage[1].sprite = skill.icon;
+                itemImage[1].enabled = true;
+                SetColor(1);
+                cool = skill.cooltime;
+                SkillUsed = false;
+                StopCoroutine(coroutine);
+            }
+
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+    public void AddSkill(Skill Inskill)
+    {
+        skill = Inskill;
+        itemImage[1].sprite = Inskill.icon;
+        itemImage[1].enabled = true;
+
+        CountText.text = "0";
+        CountText.enabled = false;
+
+        SetColor(1);
+    }
+
     public void Additem(Item Initem, int InCount)
     {
-        Debug.Log("추가할 아이템 : " + Initem.ItemName);
         item = Initem;
         itemCount = InCount;   
         itemImage[1].sprite = Initem.icon;
@@ -71,6 +151,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
     private void ClearSlot()
     {
         item = null;
+        skill = null;
         itemCount = 0;
         itemImage[1].sprite = null;
         SetColor(0);
@@ -127,6 +208,17 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
                         AddCount(-1);
                     }
                 }
+                else if(gameObject.CompareTag("QuickSlot"))
+                {
+                    if (item.itemType == Item.ItemType.Used)
+                    {
+                        if (item is UsedItem v)
+                        {
+                            ps.Healing(v.HealHP, v.HealMP);
+                            AddCount(-1);
+                        }
+                    }
+                }
 
             }
         }
@@ -134,7 +226,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
 
     void IDragHandler.OnDrag(PointerEventData eventData)
     {
-        if (item != null)
+        if (item != null || skill != null)
         {
             DragSlot.instance.transform.position = eventData.position;
         }
@@ -148,7 +240,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
-        if (item != null)
+        if (item != null || skill != null)
         {
             DragSlot.instance.dragSlot = this;
             DragSlot.instance.DragSetImage(itemImage[1]);
@@ -158,23 +250,42 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
 
     void IDropHandler.OnDrop(PointerEventData eventData)
     {
-        if (DragSlot.instance.dragSlot != null && gameObject.CompareTag("InvenSlot"))
+        if (DragSlot.instance.dragSlot != null)
         {
-            ChangeSlot();
+            if(gameObject.CompareTag("InvenSlot") || gameObject.CompareTag("QuickSlot"))
+            {
+                ChangeSlot();
+            }
         }
     }
 
     private void ChangeSlot()
     {
-
         Item tempitem = item;
         int tempitemCount = itemCount;
+        Skill tempskill = skill;
 
-        Additem(DragSlot.instance.dragSlot.item, DragSlot.instance.dragSlot.itemCount);
+        if(DragSlot.instance.dragSlot.item != null)
+        {
+            Additem(DragSlot.instance.dragSlot.item, DragSlot.instance.dragSlot.itemCount);
+        }
+        else if(DragSlot.instance.dragSlot.skill != null)
+        {
+            AddSkill(DragSlot.instance.dragSlot.skill);
+        }  
 
         if (tempitem != null)
         {
             DragSlot.instance.dragSlot.Additem(tempitem, tempitemCount);
+        }
+        else
+        {
+            DragSlot.instance.dragSlot.ClearSlot();
+        }
+
+        if (tempskill != null)
+        {
+            DragSlot.instance.dragSlot.AddSkill(tempskill);
         }
         else
         {
