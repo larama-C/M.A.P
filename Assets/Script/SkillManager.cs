@@ -31,33 +31,6 @@ public class SkillManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            skills[1].GetComponent<CurveMovealbe>().Startflag = true;
-            //for (int i = 0; i < skills.Length; i++)
-            //{
-                
-            //}
-            //skills = FindFirstObjectByType<GameObject>();
-            //Skill[] skillarr = GameObject.FindFirstObjectsByType<Skill>();
-            //Skill outskill = null;
-            //foreach (var item in skillarr)
-            //{
-            //    if (item.name == "Black Jack")
-            //    {
-            //        outskill = item;
-            //        break;
-            //    }
-            //}
 
-
-
-            //skills. = GameObject.Find("Black Jack");
-        }
     }
-
-    void ChooseMonster()
-    {
-    }
-
 }

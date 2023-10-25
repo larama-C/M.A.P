@@ -29,6 +29,7 @@ public class MonsterManager : MonoBehaviour
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
+        PlayerClass = Player.GetComponent<PlayerController>().player;
         Level = PlayerClass.Level;
         GiveEXP = Level * 10;
         MaxHP = Level * 10;

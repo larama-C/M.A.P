@@ -13,6 +13,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
     public Skill skill;
     public Item item;
     public int itemCount;
+    public GameObject Player;
 
     public Image[] itemImage;
     private TextMeshProUGUI CountText;
@@ -20,6 +21,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
     private EquipmentManager EM;
     private InventoryManager IM;
     private PlayerClass ps;
+    public SkillManager SM;
 
     private bool SkillUsed = false;
 
@@ -30,7 +32,9 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
         CountText = GetComponentInChildren<TextMeshProUGUI>();
         EM = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>().equipmentManager;
         IM = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>().inventoryManager;
+        SM = GameObject.FindGameObjectWithTag("SkillManager").GetComponent<SkillManager>();
         ps = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().player;
+        Player = GameObject.FindGameObjectWithTag("Player");
         SetColor(0);
 
         if(CountText == null)
@@ -220,6 +224,10 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
                     }
                 }
 
+            }
+            if (skill != null)
+            {
+                ClearSlot();
             }
         }
     }

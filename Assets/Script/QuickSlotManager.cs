@@ -76,7 +76,9 @@ public class QuickSlotManager : MonoBehaviour
             GETKEY = (int)KeyAction.ZERO;
             if (slots[GETKEY].skill != null)
             {
-                slots[GETKEY].SkillUse();
+                //GameObject go = Instantiate(slots[GETKEY].SM.skills[0]);
+                //go.SetActive(true);
+                //slots[GETKEY].SkillUse();
             }
             else if (slots[GETKEY].item != null)
             {
@@ -88,7 +90,11 @@ public class QuickSlotManager : MonoBehaviour
             GETKEY = (int)KeyAction.ONE;
             if (slots[GETKEY].skill != null)
             {
+                //GameObject go = Instantiate(slots[GETKEY].SM.skills[0]);
                 slots[GETKEY].SkillUse();
+                slots[GETKEY].SM.skills[0].GetComponent<BlackJack>().BlackJackPressed();
+                //go.SetActive(true);
+                //go.GetComponent<BlackJack>().BlackJackPressed();
             }
             else if (slots[GETKEY].item != null)
             {

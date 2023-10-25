@@ -17,6 +17,7 @@ TagManager:
   - InvenSlot
   - QuickSlot
   - BossMonster
+  - SkillManager
   layers:
   - Default
   - TransparentFX
