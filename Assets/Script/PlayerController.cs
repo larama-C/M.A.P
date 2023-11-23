@@ -219,14 +219,6 @@ public class PlayerController : MonoBehaviour
             IsScaffold = false;
             JumpCount--;
             rid2D.velocity = new Vector2(JumpForce * cc.xInput, 1f);
-            //if (Arrowflag == ArrowState.Left)
-            //{
-            //    rid2D.velocity = new Vector2(JumpForce, 1f);
-            //}
-            //else if (Arrowflag == ArrowState.Right)
-            //{
-            //    rid2D.velocity = new Vector2(JumpForce, 1f);
-            //}
             anim.SetBool("IsJump", true);
             Effect.GetComponent<Animator>().SetTrigger("SwitftPhantomPress");
             StartCoroutine(FreezeX(FreezeFlag));
