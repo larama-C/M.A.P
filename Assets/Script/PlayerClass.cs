@@ -3,91 +3,182 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.IO;
 
 namespace Assets
 {
-    [CreateAssetMenu]
-    public class PlayerClass : ScriptableObject
+    public enum ClassType  // 직업 유형
     {
-        public enum ClassType  // 직업 유형
-        {
-            Worrior,      //전사
-            Mage,         //마법사
-            Archor,       //궁수
-            Assassin,     //도적
-            Pirates       //해적
-        }
+        Worrior,      //전사
+        Mage,         //마법사
+        Archor,       //궁수
+        Assassin,     //도적
+        Pirates       //해적
+    }
 
-        public ClassType classtype;
-
-        public string PlayerName;
-        public int Level = 0;
+    public class PlayerData
+    {
+        public string PlayerName;                               //닉네임
+        public int Level = 0;                                   //레벨
         public string Job;
-        public string Guild;
-        public int Popularity;
-        public int Exp = 0;
-        public int NeedExp = 10;
-        public int MAXAP;
-        public int AP;
-        public int UsedAP;
-        public int CurHP = 100;
-        public int MaxHP = 100;
-        public int CurMP = 100;
-        public int MaxMP = 100;
+        public ClassType classtype;
+        public string Guild;                                    //길드명
+        public int Popularity;                                  //인기도
+        public int Exp = 0;                                     //현재 경험치
+        public int NeedExp = 10;                                //경험치 요구량
+        public int MAXAP;                                       //레벨에 따른 최대 투자 스텟
+        public int AP;                                          //남아있는 투자 스텟
+        public int UsedAP;                                      //투자한 스텟 수치
+        public int CurHP = 100;                                 //현재 체력
+        public int MaxHP = 100;                                 //최대 체력
+        public int CurMP = 100;                                 //현재 마나
+        public int MaxMP = 100;                                 //최대 마나
         public string MainStat = "LUK";
         public string SubStat1 = "DEX";
         public string SubStat2 = "";
-        public int MStat;
-        public int SubStat;
-        public int MNotPerStat;
-        public int STR = 4;
-        public int STRLEVEL = 0;
-        public float STRPer = 0f;
-        public int DEX = 4;
-        public int DEXLEVEL = 0;
-        public float DEXPer = 0f;
-        public int INT = 4;
-        public int INTLEVEL = 0;
-        public float INTPer = 0f;
-        public int LUK = 4;
-        public int LUKLEVEL = 0;
-        public float LUKPer = 0f;
-        public float AllPer = 0f;
-        public float CriticalDamage = 0.0f;
-        public float Critical = 0.0f;
-        public int NotPerStat = 0;
-        public int Offensive = 10;
-        public float OffensivePer = 0.0f;
-        public float IgnoreDefensive = 0.0f;
-        public float Defensive = 0.0f;
-        public int Tolerance = 0;
-        public int Mana = 10;
-        public float ManaPer = 0.0f;
-        public int Speed = 10;
-        public float Jump = 10.0f;
-        public float WeaponExpert = 1.3f;
-        public float DamagePer = 0.0f;
-        public float BossDamagePer = 0.0f;
-        public float BuffIncrease = 0.0f;
-        public float ItemIncrease = 0.0f;
-        public float MesoIncrease = 0.0f;
-        public float AttackSpeed = 1.0f;
-        public float Stance = 0.0f;
-        public int StarForce = 0;
-        public int ArcaneForce = 0;
-        public int AuthenticForce = 0;
-        public int Honor = 0;
-        public float FinalDamagePer = 0.0f;
-        public float Expert = 0.0f;
-        public int Carrers = 0;
-        public int Stat = 0;
-        public int MinStat = 4;
-        public int PlusStat = 0;
-        public float MaxDamage = 0.0f;
-        public float MinDamage = 0.0f;
-        public int Meso = 0;
-        public int MaplePoint = 0;
-        bool IsDead = false;
+        public int MStat;                                       //주스텟
+        public int SubStat;                                     //부스텟
+        public int MNotPerStat;                                 //퍼센트 미반영 스텟
+        public int STR = 4;                                     //기초힘스텟
+        public int STRLEVEL = 0;                                //힘투자레벨
+        public float STRPer = 0f;                               //힘퍼센트
+        public int DEX = 4;                                     //기초덱스스텟
+        public int DEXLEVEL = 0;                                //덱스투자레벨
+        public float DEXPer = 0f;                               //덱스퍼센트
+        public int INT = 4;                                     //기초인트스텟
+        public int INTLEVEL = 0;                                //인트투자레벨
+        public float INTPer = 0f;                               //인트퍼센트
+        public int LUK = 4;                                     //럭기초스텟
+        public int LUKLEVEL = 0;                                //럭투자레벨
+        public float LUKPer = 0f;                               //럭퍼센트
+        public float AllPer = 0f;                               //올스텟퍼
+        public float CriticalDamage = 0.0f;                     //크리티컬 데미지
+        public float Critical = 0.0f;                           //크리티컬 확률
+        public int NotPerStat = 0;                              //곱연산 미반영 스텟
+        public float IgnoreDefensive = 0.0f;                    //방어율 무시
+        public float Defensive = 0.0f;                          //방어력
+        public int Tolerance = 0;                               //내성수치
+        public int Offensive = 10;                              //공격력
+        public float OffensivePer = 0.0f;                       //공격력 퍼센트
+        public int Mana = 10;                                   //마력
+        public float ManaPer = 0.0f;                            //마력퍼센트
+        public int Speed = 10;                                  //이동속도
+        public float Jump = 10.0f;                              //점프력
+        public float WeaponExpert = 1.3f;                       //무기상수
+        public float JobExpert = 1.0f;                          //직업상수
+        public float DamagePer = 0.0f;                          //데미지 퍼센트
+        public float BossDamagePer = 0.0f;                      //보스데미지 퍼센트
+        public float BuffIncrease = 0.0f;                       //버프지속시간 증가
+        public float ItemIncrease = 0.0f;                       //아이템 획득률 증가
+        public float MesoIncrease = 0.0f;                       //메소 획득량 증가
+        public float AttackSpeed = 1.0f;                        //공격 속도
+        public float Stance = 0.0f;                             //스탠스 확률
+        public int StarForce = 0;                               //스타포스 수치
+        public int ArcaneForce = 0;                             //아케인포스 수치
+        public int AuthenticForce = 0;                          //어센틱포스 수치
+        public int Honor = 0;                                   //명성치
+        public float FinalDamagePer = 0.0f;                     //최종데미지 퍼센트
+        public float Expert = 0.0f;                             //숙련도
+        public int Carrers = 0;                                 //현재 전직 차수
+        public int MinStat = 4;                                 //기본 스텟 4
+        public float MaxDamage = 0.0f;                          //스텟공격력 최대 데미지
+        public float MinDamage = 0.0f;                          //스텟공격력 최소 데미지
+        public int Meso = 0;                                    //메소
+        public int MaplePoint = 0;                              //메이플 포인트
+        public bool IsMage = false;                             //법사 직업군 
+        public int MainOM;                                      //공격력/마력
+        public float MainOMPer;                                 //공격력/마력 퍼센트
+        public float MainDamage;                                //스킬에 적용되는 최종 데미지
+        public float skillDamage;                               //스킬 데미지 퍼센트
+        public bool IsDead = false;
+    }
+
+    [CreateAssetMenu]
+    public class PlayerClass : ScriptableObject
+    {
+        public string PlayerName;                               //닉네임
+        public int Level = 0;                                   //레벨
+        public string Job;
+        public ClassType classtype;
+        public string Guild;                                    //길드명
+        public int Popularity;                                  //인기도
+        public int Exp = 0;                                     //현재 경험치
+        public int NeedExp = 10;                                //경험치 요구량
+        public int MAXAP;                                       //레벨에 따른 최대 투자 스텟
+        public int AP;                                          //남아있는 투자 스텟
+        public int UsedAP;                                      //투자한 스텟 수치
+        public int CurHP = 100;                                 //현재 체력
+        public int MaxHP = 100;                                 //최대 체력
+        public int CurMP = 100;                                 //현재 마나
+        public int MaxMP = 100;                                 //최대 마나
+        public string MainStat = "LUK";
+        public string SubStat1 = "DEX";
+        public string SubStat2 = "";
+        public int MStat;                                       //주스텟
+        public int SubStat;                                     //부스텟
+        public int MNotPerStat;                                 //퍼센트 미반영 스텟
+        public int STR = 4;                                     //기초힘스텟
+        public int STRLEVEL = 0;                                //힘투자레벨
+        public float STRPer = 0f;                               //힘퍼센트
+        public int DEX = 4;                                     //기초덱스스텟
+        public int DEXLEVEL = 0;                                //덱스투자레벨
+        public float DEXPer = 0f;                               //덱스퍼센트
+        public int INT = 4;                                     //기초인트스텟
+        public int INTLEVEL = 0;                                //인트투자레벨
+        public float INTPer = 0f;                               //인트퍼센트
+        public int LUK = 4;                                     //럭기초스텟
+        public int LUKLEVEL = 0;                                //럭투자레벨
+        public float LUKPer = 0f;                               //럭퍼센트
+        public float AllPer = 0f;                               //올스텟퍼
+        public float CriticalDamage = 0.0f;                     //크리티컬 데미지
+        public float Critical = 0.0f;                           //크리티컬 확률
+        public int NotPerStat = 0;                              //곱연산 미반영 스텟
+        public float IgnoreDefensive = 0.0f;                    //방어율 무시
+        public float Defensive = 0.0f;                          //방어력
+        public int Tolerance = 0;                               //내성수치
+        public int Offensive = 10;                              //공격력
+        public float OffensivePer = 0.0f;                       //공격력 퍼센트
+        public int Mana = 10;                                   //마력
+        public float ManaPer = 0.0f;                            //마력퍼센트
+        public int Speed = 10;                                  //이동속도
+        public float Jump = 10.0f;                              //점프력
+        public float WeaponExpert = 1.3f;                       //무기상수
+        public float JobExpert = 1.0f;                          //직업상수
+        public float DamagePer = 0.0f;                          //데미지 퍼센트
+        public float BossDamagePer = 0.0f;                      //보스데미지 퍼센트
+        public float BuffIncrease = 0.0f;                       //버프지속시간 증가
+        public float ItemIncrease = 0.0f;                       //아이템 획득률 증가
+        public float MesoIncrease = 0.0f;                       //메소 획득량 증가
+        public float AttackSpeed = 1.0f;                        //공격 속도
+        public float Stance = 0.0f;                             //스탠스 확률
+        public int StarForce = 0;                               //스타포스 수치
+        public int ArcaneForce = 0;                             //아케인포스 수치
+        public int AuthenticForce = 0;                          //어센틱포스 수치
+        public int Honor = 0;                                   //명성치
+        public float FinalDamagePer = 0.0f;                     //최종데미지 퍼센트
+        public float Expert = 0.0f;                             //숙련도
+        public int Carrers = 0;                                 //현재 전직 차수
+        public int MinStat = 4;                                 //기본 스텟 4
+        public float MaxDamage = 0.0f;                          //스텟공격력 최대 데미지
+        public float MinDamage = 0.0f;                          //스텟공격력 최소 데미지
+        public int Meso = 0;                                    //메소
+        public int MaplePoint = 0;                              //메이플 포인트
+        public bool IsMage = false;                             //법사 직업군 
+        public int MainOM;                                      //공격력/마력
+        public float MainOMPer;                                 //공격력/마력 퍼센트
+        public float MainDamage;                                //스킬에 적용되는 최종 데미지
+        public float skillDamage;                               //스킬 데미지 퍼센트
+        public bool IsDead = false;
+
+        //[SerializeField] public PlayerData pd = new PlayerData();
+
+        //[ContextMenu("To Json Data")]
+        //void SavePlayerDataToJson()
+        //{
+        //    string jsonData = JsonUtility.ToJson(pd);
+        //    string path = Path.Combine(Application.dataPath, "playerData.json");
+        //    File.WriteAllText(path, jsonData);
+        //}
 
         public void StartSet()
         {
@@ -110,6 +201,17 @@ namespace Assets
             if(CurHP <= 0)
             {
                 IsDead = true;
+            }
+
+            if(IsMage)
+            {
+                MainOM = Mana;
+                MainOMPer = ManaPer;
+            }
+            else
+            {
+                MainOM = Offensive;
+                MainOMPer = OffensivePer;
             }
         }
 
@@ -218,7 +320,7 @@ namespace Assets
                     SubStat = DEX;
                     break;
                 case "INT":
-                    SubStat = INT;
+                    SubStat = INT;  
                     break;
                 case "LUK":
                     SubStat = LUK;
@@ -227,8 +329,88 @@ namespace Assets
                     return;
             }
             //[(주스텟*4+부스텟)/100]*(총 공/마)*[(100+데미지%)/100]*[(100+최종 데미지)/100]*[(100+공/마%)/100]*무기상수*직업상수
-            MaxDamage = ((MStat * 4 + SubStat) * 0.01f) * (Offensive) * (1.0f + OffensivePer) * WeaponExpert * (1.0f+DamagePer) * (1.0f +FinalDamagePer);
+            MaxDamage = ((MStat * 4 + SubStat) * 0.01f) * (MainOM) * ((100.0f + DamagePer) / 0.01f) * ((100.0f + FinalDamagePer) / 0.01f) * 
+                ((100.0f + MainOMPer) / 0.01f) * WeaponExpert * JobExpert;
             MinDamage = Expert * MaxDamage;
+        }
+
+        void Calculating(MonsterManager mm)
+        {
+            //데미지 = [(주스탯 * 4 + 부스탯) * 총 공격력 * 무기상수 * 직업보정상수 / 100] * (스킬 퍼뎀 / 100)
+            //*(크리티컬 발동시) 크리티컬 데미지 보정 * [(100 + 공격력 %) / 100] * [(100 + 데미지 % +보공 %) / 100]
+            //* 방어율 무시 보정 *렙차 보정* 속성 보정 * (아케인포스 필요 적의 경우) 아케인포스 보정 *숙련도 보정
+            //* [(모든 최종데미지 계산값 % +100) / 100 ]      (1.1)
+
+            float CalMonsterForce = 1f;
+            float MonsterNeedForce = 1f;
+
+            switch (mm.MS)
+            {
+                case MonsterSpecify.None:
+                    MonsterNeedForce = 1f;
+                    break;
+                case MonsterSpecify.StarForce:
+                    MonsterNeedForce = StarForce;
+                    break;
+                case MonsterSpecify.ArcaneForce:
+                    MonsterNeedForce = ArcaneForce;
+                    break;
+                case MonsterSpecify.AuthenticForce:
+                    MonsterNeedForce = AuthenticForce;
+                    break;
+                default:
+                    return;
+            }
+
+            float CalDefensive = 1f;
+
+            if(mm.DefensivePer > 0.0f)
+            {
+                if(IgnoreDefensive >= mm.DefensivePer)
+                {
+                    CalDefensive = 1f;
+                }
+                else
+                {
+                    float temp = 0f;
+                    temp = mm.DefensivePer % 100.0f;
+                    CalDefensive = temp;
+                }
+            }
+
+            float CalLevelDamage = 1f;
+
+            if(mm.Level >= Level)
+            {
+                if(mm.Level + 20 >= Level)
+                {
+                    CalLevelDamage = 0.8f;
+                }
+                else
+                {
+                    CalLevelDamage = (1.0f - ((mm.Level - Level) / 100.0f));
+                }
+            }
+            else
+            {
+                if(mm.Level + 20 <= Level)
+                {
+                    CalLevelDamage = 1.2f;
+                }
+                else
+                {
+                    CalLevelDamage = 1.0f + ((Level -mm.Level) / 100.0f);
+                }
+            }
+
+            //데미지 = [(주스탯 * 4 + 부스탯) * 총 공격력 * 무기상수 * 직업보정상수 / 100] * (스킬 퍼뎀 / 100)
+            //*(크리티컬 발동시) 크리티컬 데미지 보정 * [(100 + 공격력 %) / 100] * [(100 + 데미지 % +보공 %) / 100]
+            //* 방어율 무시 보정 *렙차 보정* 속성 보정 * (아케인포스 필요 적의 경우) 아케인포스 보정 *숙련도 보정
+            //* [(모든 최종데미지 계산값 % +100) / 100 ]      (1.1)
+
+            MainDamage = ((MStat * 4 + SubStat) * MainOM * WeaponExpert * JobExpert * 0.01f) * (skillDamage * 0.01f)
+            /* (크리티컬 발동시) */ * ((100.0f + MainOMPer) * 0.01f) * ((100.0f + DamagePer) * 0.01f) * ((100.0f + DamagePer + BossDamagePer) * 0.01f)
+            * CalDefensive * CalLevelDamage * 1f * 1f * Expert * ((FinalDamagePer + 100) / 100.0f);
         }
 
         public float CalDamage()

@@ -6,6 +6,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
+public enum E_UIEnum
+{
+    States,
+    Inventory,
+    Equipment,
+}
+
 public class UIManager : MonoBehaviour
 {
     public GameObject StatusWindow;
@@ -15,12 +23,24 @@ public class UIManager : MonoBehaviour
     public GameObject EquipmentWindow;
     public EquipmentManager equipmentManager;
 
+
+    public List<MonoBehaviour> AllWindowUIList = new List<MonoBehaviour>( (int)E_UIEnum.Equipment + 1 );
+
     // Start is called before the first frame update
     void Start()
     {
         statusManager = StatusWindow.GetComponent<StatusManager>();
         inventoryManager = InventoryWindow.GetComponent<InventoryManager>();
         equipmentManager = EquipmentWindow.GetComponent<EquipmentManager>();
+
+
+
+        //AllWindowUIList = new List<MonoBehaviour>((int)E_UIEnum.Equipment + 1);
+
+        //AllWindowUIList[(int)E_UIEnum.States] = statusManager;
+        //AllWindowUIList[(int)E_UIEnum.Inventory] = null;
+
+
     }
 
     private void Awake()

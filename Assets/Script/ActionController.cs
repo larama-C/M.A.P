@@ -7,7 +7,7 @@ public class ActionController : MonoBehaviour
 {
     [SerializeField]
 
-    CapsuleCollider2D PlayerCollider;
+    Collider2D PlayerCollider;
 
     private float range = 1.0f;  // 아이템 습득이 가능한 최대 거리
 
@@ -25,6 +25,7 @@ public class ActionController : MonoBehaviour
 
     private void Start()
     {
+        PlayerCollider = GetComponent<Collider2D>();
     }
 
     void Update()
@@ -35,7 +36,7 @@ public class ActionController : MonoBehaviour
 
     private void TryAction()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKey(KeyCode.Z))
         {
             CanPickUp();
         }
@@ -46,7 +47,7 @@ public class ActionController : MonoBehaviour
         hitInfo = Physics2D.Raycast(PlayerCollider.bounds.center, Vector2.down, PlayerCollider.bounds.extents.y + range, layerMask);
         if (hitInfo.collider != null)
         {
-            raycolor = Color.green;
+            raycolor = Color.black;
             if (hitInfo.transform.tag == "Item")
             {
                 pickupActivated = true;
@@ -54,7 +55,7 @@ public class ActionController : MonoBehaviour
         }
         else
         {
-            raycolor = Color.red;
+            raycolor = Color.white;
             pickupActivated = false;
         }
         Debug.DrawRay(PlayerCollider.bounds.center, Vector2.down * (PlayerCollider.bounds.extents.y + range), raycolor);

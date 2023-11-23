@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f0620f6206b9a841b3d1ff7ab02ceea, type: 3}
   m_Name: Black Jack
   m_EditorClassIdentifier: 
-  skill: {fileID: 0}
-  SkillId: 0
+  curve: {fileID: 0}
+  SkillId: 10076
   SkillName: "\uBE14\uB799\uC7AD"
   SkillDescription: 
   SkillLevel: 0
   damage: 0
   basicdamage: 0
   damageperLevel: 0
-  cooltime: 15
+  cooltime: 5
   animationName: 
   icon: {fileID: 21300000, guid: 21f181ab837f6b342acdf82e18c5c2cd, type: 3}
   Cooltimeicon: {fileID: 21300000, guid: 8f7ad1b9f1e53bb48b98cfcb11237e7d, type: 3}

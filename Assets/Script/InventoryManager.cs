@@ -46,6 +46,8 @@ public class InventoryManager : MonoBehaviour
     {
         Coin[0].text = ps.Meso.ToString();
         Coin[1].text = ps.MaplePoint.ToString();
+        //Coin[0].text = GameManager.Instance.Meso.ToString();
+        //Coin[1].text = GameManager.Instance.MaplePoint.ToString();
     }
 
     public void InputItem(Item item, int Count = 1)

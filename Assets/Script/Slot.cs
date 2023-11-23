@@ -23,7 +23,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
     private PlayerClass ps;
     public SkillManager SM;
 
-    private bool SkillUsed = false;
+    public bool SkillUsed = false;
 
     // Start is called before the first frame update
     void Start()
@@ -94,6 +94,8 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
     private IEnumerator Cooltime()
     {
         float cool = skill.cooltime;
+        //GameObject go = Instantiate(itemImage[1].gameObject);
+        //go.transform.position = itemImage[1].gameObject.transform.position;
         itemImage[1].sprite = skill.Cooltimeicon;
         itemImage[1].enabled = true;
         SetColor(1);
@@ -244,6 +246,14 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
     {
         DragSlot.instance.SetColor(0);
         DragSlot.instance.dragSlot = null;
+        if (item != null || skill != null)
+        {
+            SetColor(1);
+        }
+        else
+        {
+            SetColor(0);
+        }
     }
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
@@ -251,6 +261,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler, IDragHandler, IEndDragH
         if (item != null || skill != null)
         {
             DragSlot.instance.dragSlot = this;
+            SetColor(0);
             DragSlot.instance.DragSetImage(itemImage[1]);
             DragSlot.instance.transform.position = eventData.position;
         }

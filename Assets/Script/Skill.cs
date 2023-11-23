@@ -2,15 +2,14 @@
 using Assets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu]
 public class Skill : ScriptableObject
 {
-    public CurveMovealbe curve;
-
-    public int SkillId;
+    public PhantomSkill SkillId;
     public string SkillName;
     public string SkillDescription;
     public int SkillLevel;
@@ -20,6 +19,8 @@ public class Skill : ScriptableObject
     private int AttackCount;
     private int MonsterCount;
     public float cooltime;
+
+    public PlayerClass ps;
 
     public enum SkillType
     {
@@ -33,8 +34,16 @@ public class Skill : ScriptableObject
     public Sprite Cooltimeicon;
     private Animator anim;
 
+
+
+    int printSkillLevel()
+    {
+        return SkillLevel;
+    }
+
     void CalDamage()
     {
+        ps.CalDamage();
         damage = basicdamage + (SkillLevel * damageperLevel);   
     }
 }

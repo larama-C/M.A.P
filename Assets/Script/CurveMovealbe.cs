@@ -1,12 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UI;
 
 public class CurveMovealbe : MonoBehaviour
 {
@@ -18,16 +16,20 @@ public class CurveMovealbe : MonoBehaviour
 
     public float Dis;
 
+    private MonsterManager mm;
+
     public AnimationCurve curve;
     public Animator anim;
     public float speed = 1.0f;
     private float hoverHeight = 1f;
     public Vector2 boxSize;
 
+    public GameObject hiteffect;
+
     public int damage = 10;
     int attackCount = 0;
     private bool OnTarget = false;
-
+    private bool DeadFlag = false;
     BlackJack black;
 
     // Start is called before the first frame update
@@ -36,30 +38,47 @@ public class CurveMovealbe : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         black = gameObject.GetComponentInParent<BlackJack>();
         Player = GameObject.FindGameObjectWithTag("Player");
-        Monster = GameObject.FindGameObjectsWithTag("Monster");
-        Dis = Vector2.Distance(Player.transform.position, Monster[0].transform.position);
-        ChaseMonster();
     }
 
     void ChaseMonster()
     {
         Monster = GameObject.FindGameObjectsWithTag("Monster");
-        if(Monster != null)
+        BossMonster = GameObject.FindGameObjectWithTag("BossMonster");
+        if (BossMonster != null)
         {
-            foreach (GameObject Close in Monster)
-            {
-                float Distance = Vector2.Distance(Player.transform.position, Close.transform.position);
-                if (Distance <= Dis)
-                {
-                    TargetMonster = Close;
-                    Dis = Distance;
-                }
-            }
+            TargetMonster = BossMonster;
+            mm = TargetMonster.GetComponentInParent<MonsterManager>();
         }
-        else
+        else if(BossMonster == null)
         {
-            TargetMonster = null;
-            Dead();
+            
+            foreach (GameObject any in Monster)
+            {
+                int rand;
+                rand = Random.Range(0, Monster.Length);
+                TargetMonster = Monster[rand];
+                mm = TargetMonster.GetComponentInParent<MonsterManager>();
+            }
+
+            //if(Monster.Length > 0)
+            //{
+            //    Dis = Vector2.Distance(Player.transform.position, Monster[0].transform.position);
+            //    foreach (GameObject Close in Monster)
+            //    {
+            //        float Distance = Vector2.Distance(Player.transform.position, Close.transform.position);
+            //        if (Distance <= Dis)
+            //        {
+            //            TargetMonster = Close;
+            //            Dis = Distance;
+            //        }
+            //    }
+            //}
+
+            if(Monster.Length <= 0)
+            {
+                OnTarget = false;
+                Invoke("Dead", 3f);
+            }
         }
     }
 
@@ -67,26 +86,30 @@ public class CurveMovealbe : MonoBehaviour
     {
         if (gameObject != null)
         {
+            mm.UnderAttack(damage, hiteffect);
             anim.SetBool("ISFINALE", true);
             Destroy(gameObject, 1f);
+            StopAllCoroutines();
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-      
+        if(DeadFlag)
+        {
+            Dead();
+        }
     }
 
-    public void Generate(Vector3 set)
+    public void Generate()
     {
-        StartCoroutine(IEFlight(set));
+        StartCoroutine(IEFlight());
     }
 
-    private IEnumerator IEFlight(Vector3 SET)
+    private IEnumerator IEFlight()
     {
-        gameObject.transform.position = SET;
-        gameObject.SetActive(true);
+
         float duration = speed;
         float time = 0.0f;
         Vector3 start = gameObject.transform.position;
@@ -98,19 +121,16 @@ public class CurveMovealbe : MonoBehaviour
         {
             OnTarget = true;
             end = TargetMonster.transform.position;
-        }
-        else
-        {
-            ChaseMonster();
-            OnTarget= false;
+            yield return null;
         }
 
-        if (Monster == null)
+        if (Monster.Length <= 0)
         {
             yield return new WaitForSeconds(3f);
+            OnTarget = false;
             Vector2 temp = gameObject.transform.position;
             end = temp;
-            Dead();
+            DeadFlag = true;
         }
         duration = speed;
 
@@ -135,6 +155,7 @@ public class CurveMovealbe : MonoBehaviour
                 if(OnTarget)
                 {
                     StartCoroutine(Delay(collider.GetComponent<MonsterManager>()));
+                    yield return null;
                 }
             }
             else
@@ -144,10 +165,18 @@ public class CurveMovealbe : MonoBehaviour
                     if (OnTarget)
                     {
                         StartCoroutine(Delay(collider.GetComponent<MonsterManager>()));
+                        yield return null;
                     }
                 }
             }
         }
+
+        if(collider2Ds.Length <= 0)
+        {
+            DeadFlag = true;
+            yield return null;
+        }
+
         yield return null;
     }
     private void OnDrawGizmos()
@@ -162,23 +191,26 @@ public class CurveMovealbe : MonoBehaviour
         {
             if(attackCount < 8)
             {
-                if(TargetMonster != null)
+                if(Monster.Length > 0)
                 {
-                    mm.UnderAttack(damage);
-                    attackCount++;
-                    yield return null;
+                    if (TargetMonster != null)
+                    {
+                        mm.UnderAttack(damage, hiteffect);
+                        attackCount++;
+                        yield return new WaitForSeconds(0.5f);
+                    }
+                    ChaseMonster();
+                    StartCoroutine(IEFlight());
                 }
                 else
                 {
-                    ChaseMonster();
-                    StartCoroutine(IEFlight(gameObject.transform.position));
+                    DeadFlag = true;
                     yield return null;
                 }
-                yield return new WaitForSeconds(speed);
             }
-            else if(attackCount >= 8 || Monster == null)
+            else
             {
-                Dead();
+                DeadFlag = true;
                 yield return null;
             }
         }

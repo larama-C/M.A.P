@@ -88,13 +88,10 @@ public class QuickSlotManager : MonoBehaviour
         else if (Input.GetKeyDown(KeySetting.keys[KeyAction.ONE]))
         {
             GETKEY = (int)KeyAction.ONE;
-            if (slots[GETKEY].skill != null)
+            if (slots[GETKEY].skill != null && slots[GETKEY].SkillUsed == false)
             {
-                //GameObject go = Instantiate(slots[GETKEY].SM.skills[0]);
                 slots[GETKEY].SkillUse();
-                slots[GETKEY].SM.skills[0].GetComponent<BlackJack>().BlackJackPressed();
-                //go.SetActive(true);
-                //go.GetComponent<BlackJack>().BlackJackPressed();
+                slots[GETKEY].SM.skills[1].GetComponent<BlackJack>().BlackJackPressed();
             }
             else if (slots[GETKEY].item != null)
             {
@@ -104,7 +101,22 @@ public class QuickSlotManager : MonoBehaviour
         else if (Input.GetKeyDown(KeySetting.keys[KeyAction.TWO]))
         {
             GETKEY = (int)KeyAction.TWO;
-            Useditem(GETKEY);
+            if (slots[GETKEY].skill != null && slots[GETKEY].SkillUsed == false)
+            {
+                if (slots[GETKEY].skill.cooltime != 0)
+                {
+                    slots[GETKEY].SkillUse();
+                }
+                slots[GETKEY].SM.skills[0].GetComponent<PressSkill>().CheckPress(true);
+            }
+            else if (slots[GETKEY].item != null)
+            {
+                Useditem(GETKEY);
+            }
+        }
+        else if (Input.GetKeyUp(KeySetting.keys[KeyAction.TWO]))
+        {
+            slots[GETKEY].SM.skills[0].GetComponent<PressSkill>().CheckPress(false);
         }
         else if (Input.GetKeyDown(KeySetting.keys[KeyAction.THREE]))
         {

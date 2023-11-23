@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f0620f6206b9a841b3d1ff7ab02ceea, type: 3}
+  m_Name: TempestOfCard
+  m_EditorClassIdentifier: 
+  SkillId: 10043
+  SkillName: "\uD15C\uD398\uC2A4\uD2B8 \uC624\uBE0C \uCE74\uB4DC"
+  SkillDescription: 
+  SkillLevel: 0
+  damage: 10
+  basicdamage: 0
+  damageperLevel: 0
+  cooltime: 0
+  ps: {fileID: 0}
+  animationName: 
+  icon: {fileID: 21300000, guid: 6eedb68960ae8ad42a364664bce8b953, type: 3}
+  Cooltimeicon: {fileID: 21300000, guid: 0f5095ebe6c45394fb6eec7f17078317, type: 3}
